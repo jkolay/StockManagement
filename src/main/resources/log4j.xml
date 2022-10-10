@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+	<Properties>
+		<Property name="applogLevel">INFO</Property>
+		<Property name="nonAppLogLevel">INFO</Property>
+		<Property name="log-path">logs</Property>
+	</Properties>
+	<Appenders>
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		<RollingFile name="file" fileName="${log-path}"
+			filePattern="${log-path}-%d{dd-MM-yyyy}-%i">
+			<PatternLayout
+				pattern="%d{dd-MM-yyyy} %d{HH:mm:ss.SSS} %-5level %logger{25} [%t{20}] %M : %m%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"
+					modulate="true" />
+				<SizeBasedTriggeringPolicy size="20 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Logger name="STOCK_LOG" level="${applogLevel}"
+			additivity="false">
+			<AppenderRef ref="file" />
+		</Logger>
+		<Root level="${applogLevel}">
+			<AppenderRef ref="CONSOLE" />
+
+		</Root>
+	</Loggers>
+</Configuration>

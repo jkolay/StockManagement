@@ -10,6 +10,7 @@ public class UserResponse {
     private long id;
     private String username;
     private String password;
+    private String email;
     private String role;
     private Wallet wallet;
 }

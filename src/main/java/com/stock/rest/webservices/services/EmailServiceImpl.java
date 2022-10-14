@@ -7,11 +7,13 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 
+@Service
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
@@ -22,6 +24,7 @@ public class EmailServiceImpl implements EmailService {
 
 
     // To send a simple email
+    @Override
     public String sendSimpleMail(EmailDetails details)
     {
 
@@ -45,6 +48,7 @@ public class EmailServiceImpl implements EmailService {
 
         // Catch block to handle the exceptions
         catch (Exception e) {
+            e.printStackTrace();
             return "Error while Sending Mail";
         }
     }

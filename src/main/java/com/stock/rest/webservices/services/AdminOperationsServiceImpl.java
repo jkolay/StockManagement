@@ -1,6 +1,7 @@
 package com.stock.rest.webservices.services;
 
 import com.stock.rest.webservices.exception.UserValidationException;
+import com.stock.rest.webservices.model.EmailDetails;
 import com.stock.rest.webservices.model.UserRequest;
 import com.stock.rest.webservices.model.entity.User;
 import com.stock.rest.webservices.model.entity.Wallet;
@@ -19,6 +20,8 @@ public class AdminOperationsServiceImpl implements AdminOperationsService{
     private UserRepository userRepository;
     @Autowired
     private WalletRepository walletRepository;
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public UserResponse addUser(UserRequest userRequest) throws UserValidationException {
@@ -32,12 +35,21 @@ public class AdminOperationsServiceImpl implements AdminOperationsService{
                 .username(userRequest.getUsername())
                 .password(userRequest.getPassword())
                 .role(userRequest.getRole())
+                .email(userRequest.getEmail())
                 .wallet(wallet)
                 .build();
         wallet.setUser(user);
         userRepository.save(user);
+        EmailDetails emailDetails= new EmailDetails();
+        emailDetails.setRecipient(userRequest.getEmail());
+        emailDetails.setSubject("Welcome to StockReserve");
+        emailDetails.setMsgBody("Hi "+userRequest.getUsername()+",\nWelcome to Stock Reserve.You can add money in your wallet and start Trading.\nKind Regards,\nTeam StockReserve");
+
+
         User userResponse= userRepository.findByUsername(user.getUsername());
-        return UserResponse.builder().id(userResponse.getId()).password(userResponse.getPassword()).role(userResponse.getRole()).username(userResponse.getUsername()).wallet(userResponse.getWallet()).build();
+        emailService.sendSimpleMail(emailDetails);
+
+        return UserResponse.builder().id(userResponse.getId()).password(userResponse.getPassword()).role(userResponse.getRole()).username(userResponse.getUsername()).email(userResponse.getEmail()).wallet(userResponse.getWallet()).build();
     }
 
     @Override

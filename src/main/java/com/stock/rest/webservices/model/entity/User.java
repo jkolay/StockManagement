@@ -34,17 +34,21 @@ public class User {
 	@NotNull
 	private String role = "ROLE_USER";
 
+	@NotNull
+	private String email;
+
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JsonManagedReference
 	@JoinColumn(name = "wallet_id", referencedColumnName = "id")
 	private Wallet wallet;
 
-	public User(long id, String username, String password ) {
+	public User(long id, String username, String password,String email ) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
+		this.email=email;
 	}
 
 

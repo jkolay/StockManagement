@@ -43,7 +43,7 @@ public class AdminOperationsServiceImpl implements AdminOperationsService{
         EmailDetails emailDetails= new EmailDetails();
         emailDetails.setRecipient(userRequest.getEmail());
         emailDetails.setSubject("Welcome to StockReserve");
-        emailDetails.setMsgBody("Hi "+userRequest.getUsername()+",\nWelcome to Stock Reserve.You can add money in your wallet and start Trading.\nKind Regards,\nTeam StockReserve");
+        emailDetails.setMsgBody("Hi "+userRequest.getUsername()+",\n\nWelcome to Stock Reserve.You can add money in your wallet and start Trading.\n\nKind Regards,\nTeam StockReserve");
 
 
         User userResponse= userRepository.findByUsername(user.getUsername());
@@ -56,7 +56,7 @@ public class AdminOperationsServiceImpl implements AdminOperationsService{
     public List<UserResponse> retrieveUsers() {
         List<User> users= userRepository.findAll();
         List<UserResponse> response = users.stream().map(user -> {
-            return UserResponse.builder().id(user.getId()).password(user.getPassword()).role(user.getRole()).username(user.getUsername()).wallet(user.getWallet()).build();
+            return UserResponse.builder().id(user.getId()).password(user.getPassword()).role(user.getRole()).username(user.getUsername()).wallet(user.getWallet()).email(user.getEmail()).build();
 
         }).collect(Collectors.toList());
         return response;

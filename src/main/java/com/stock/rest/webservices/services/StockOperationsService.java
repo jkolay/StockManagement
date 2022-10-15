@@ -21,7 +21,7 @@ public interface StockOperationsService {
 
 	public List<StockResponse> findAllStocks();
 
-	public Stock addStock(StockRequest stock) throws StockOperationsExceptions;
+	public List<Stock> addStock(List<StockRequest> stock) throws StockOperationsExceptions;
 
 	public void updateStockPrice(int stockId, double price);
 

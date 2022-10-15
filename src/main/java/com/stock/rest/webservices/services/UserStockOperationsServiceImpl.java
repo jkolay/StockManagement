@@ -4,6 +4,7 @@ import com.stock.rest.webservices.exception.StockNotFoundException;
 import com.stock.rest.webservices.exception.StockOperationsExceptions;
 import com.stock.rest.webservices.exception.UserNotFoundException;
 import com.stock.rest.webservices.model.BuyStockRequest;
+import com.stock.rest.webservices.model.EmailDetails;
 import com.stock.rest.webservices.model.response.AllStockResponse;
 import com.stock.rest.webservices.model.response.BuyStockResponse;
 import com.stock.rest.webservices.model.SellStockRequest;
@@ -15,6 +16,7 @@ import com.stock.rest.webservices.model.entity.Wallet;
 import com.stock.rest.webservices.repository.StockRepository;
 import com.stock.rest.webservices.repository.UserRepository;
 import com.stock.rest.webservices.repository.UserStockRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +25,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserStockOperationsServiceImpl implements UserStockOperationsService{
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(StockOperationsServiceImpl.class);
+    private static final String INFO_BUY="Bough :{} stocks from company :{} ";
+    private static final String INFO_SELL="Sold :{} stocks from company :{} ";
+
+    private static final String INFO_RETRIEVE="searched id(S):{} and name :{} from db";
+    private static final String EMAIL_BODY_BUY_STOCK="Hi,\n\nCongratulations on your new buy.Keep Buying more stocks .\n\nThanks & Regards,\nTeam.";
+    private static final String EMAIL_BODY_SELL_STOCK="Hi,\n\nYou have sold some stocks.\n\nThanks & Regards,\nTeam.";
+    private static final String EMAIL_SUBJECT="Mail from Stock Reserve";
+
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private StockRepository stockRepository;
     @Autowired
     private UserStockRepository userStockRepository;
+    @Autowired
+    EmailServiceImpl emailService;
+
     @Override
     public BuyStockResponse buyNewStock(BuyStockRequest stockRequest) throws UserNotFoundException, StockOperationsExceptions {
         Long userId=stockRequest.getUserId();
@@ -56,8 +70,17 @@ public class UserStockOperationsServiceImpl implements UserStockOperationsServic
         else{
             throw new StockOperationsExceptions("Stock numbers are limited. Currently available number is "+currentStockNumbers);
         }
-
+        LOGGER.info(INFO_BUY,stockRequest.getNumberOfStocks(),stockRequest.getStockId());
+        sendEmail(EMAIL_BODY_BUY_STOCK,currentUser.getEmail());
        return BuyStockResponse.builder().stockId(stockId).numberOFStocks(totalStockAfterBuy).status("SUCCESS").build();
+    }
+
+    private void sendEmail(String emailBody, String email) {
+        EmailDetails emailDetails = new EmailDetails();
+        emailDetails.setRecipient(email);
+        emailDetails.setSubject(EMAIL_SUBJECT);
+        emailDetails.setMsgBody(emailBody);
+        emailService.sendSimpleMail(emailDetails);
     }
 
     @Override
@@ -77,6 +100,7 @@ public class UserStockOperationsServiceImpl implements UserStockOperationsServic
             throw new StockOperationsExceptions("You do not have sufficient stock.Please check your stock details ");
 
         }
+        sendEmail(EMAIL_BODY_SELL_STOCK,currentUser.getEmail());
         return SellStockResponse.builder().stockId(stockId).numberOFStocks(availableStockAfterSell).status("SUCCESS").build();
     }
 

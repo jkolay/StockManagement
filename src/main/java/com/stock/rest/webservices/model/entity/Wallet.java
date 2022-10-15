@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -19,7 +20,8 @@ import javax.persistence.*;
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Wallet {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="wallet_id_seq")
+    @SequenceGenerator(name="wallet_id_seq", sequenceName="wallet_id_seq", allocationSize=1,initialValue = 1015)
     private Integer id;
 
     @OneToOne(mappedBy = "wallet")

@@ -2,15 +2,13 @@ package com.stock.rest.webservices.model.entity;
 
 import java.sql.Timestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.format.annotation.NumberFormat.Style;
@@ -31,7 +29,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class Price {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="price_id_seq")
+	@SequenceGenerator(name="price_id_seq", sequenceName="price_id_seq", allocationSize=1,initialValue = 1015)
+
 	private Integer id;
 	@NotNull
 	@NumberFormat(style = Style.NUMBER)

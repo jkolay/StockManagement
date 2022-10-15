@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -22,8 +23,10 @@ import javax.validation.constraints.Size;
 public class User {
 
 	@Id
-	@GeneratedValue
 	@Column(name="user_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="user_id_seq")
+	@SequenceGenerator(name="user_id_seq", sequenceName="user_id_seq", allocationSize=1,initialValue = 1015)
+
 	private long id;
 	@NotNull
 	@Size(min =5,max=15,message = "Username length should be between 5 and 15")

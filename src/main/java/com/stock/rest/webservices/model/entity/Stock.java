@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.JoinFormula;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,6 +41,8 @@ public class Stock {
 
 	@Id
 	@Column(name="stock_id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="stock_id_seq")
+	@SequenceGenerator(name="stock_id_seq", sequenceName="stock_id_seq", allocationSize=1,initialValue = 1015)
 	private int id;
 
 	@Size(min = 3, message = VALIDATION)

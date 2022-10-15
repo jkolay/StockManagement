@@ -18,6 +18,8 @@ import com.stock.rest.webservices.model.StockLists;
 import com.stock.rest.webservices.model.response.StockResponse;
 import com.stock.rest.webservices.services.StockOperationsService;
 
+import java.util.List;
+
 /**
  * Controller method is used to get the rest resource for stock object for admin users
  *
@@ -53,7 +55,7 @@ public class AdminStockController {
 	 */
 
 	@PostMapping("/add")
-	public ResponseEntity<Stock> addStock(@Valid @RequestBody StockRequest stock) throws StockOperationsExceptions {
+	public ResponseEntity<List<Stock>> addStock(@Valid @RequestBody List<StockRequest> stock) throws StockOperationsExceptions {
 		return ResponseEntity.ok(stockOperationsService.addStock(stock));
 	}
 

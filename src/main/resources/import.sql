@@ -16,9 +16,10 @@ update price set stock_stock_id=104 where id=11004;
 insert into wallet values(101,12000);
 insert into wallet values(102,15000);
 
-insert into users (user_id,password,role,username,wallet_id,email) values (1012,'password','ROLE_USER','Saheli',101,'xyz@gmail.com');
-insert into users (user_id,password,role,username,wallet_id,email)  values (1014,'password','ROLE_USER','Shree',102,'abc@gmail.com');
+insert into users (user_id,email,password,role,username,wallet_id) values (1012,'xyz@gmail.com','password','ROLE_USER','Saheli',101);
+insert into users (user_id,email,password,role,username,wallet_id)  values (1014,'abc@gmail.com','password','ROLE_USER','Shree',102);
 
 
 insert into user_stock_details (id,number_of_stocks,stock_id,user_id)  values(101,11,101,1012);
 insert into user_stock_details (id,number_of_stocks,stock_id,user_id) values(102,15,104,1012)
+
